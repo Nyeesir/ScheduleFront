@@ -2,7 +2,7 @@
 
 export default function Schedule() {
     return (
-        <div>
+        <div style={{width:'80%',float:'left'}}>
             <ScheduleTimePeriodPicker/>
         </div>
     )

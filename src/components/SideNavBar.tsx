@@ -137,7 +137,7 @@ function logSmth(){
 
 export default function SideNavBar() {
     return (
-        <>
+        <div style={{width:'20%', float:'left'}}>
             {mockPropsGrouped.map((mainCategory =>
                 <NavLink label={mainCategory.name} href={"#"} leftSection={mainCategory.icon}>
                     {mainCategory.children.map(subcategory => (
@@ -227,6 +227,6 @@ export default function SideNavBar() {
             {/*        </NavLink>*/}
             {/*    </NavLink>*/}
             {/*</NavLink>*/}
-        </>
+        </div>
     );
 }
