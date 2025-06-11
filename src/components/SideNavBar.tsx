@@ -6,14 +6,17 @@ let mockGoupProps = [
     {
         name: "Biofizyka 1 stopnia",
         hasSchedule: true,
+        id: 0,
         children: [
             {
                 name: "BF-1 rok",
                 hasSchedule: true,
+                id: 1,
                 children: [
                     {
                         name: "BF/ I stopień/ 1rok / gr. 1",
-                        hasSchedule: true
+                        hasSchedule: true,
+                        id: 2,
                     }
                 ]
                 
@@ -21,24 +24,29 @@ let mockGoupProps = [
             {
                 name: "BF-2 rok",
                 hasSchedule: true,
+                id: 3,
                 children: [
                     {
                         name: "BF/ I stopień/ 2rok",
-                        hasSchedule: true
+                        hasSchedule: true,
+                        id: 4,
                     }
                 ]
             },
             {
                 name: "BF-3 rok",
                 hasSchedule: true,
+                id: 5,
                 children: [
                     {
                         name: "BBF/ I stopień/ 3rok/ Biofizyka molekularna",
-                        hasSchedule: true
+                        hasSchedule: true,
+                        id: 6,
                     },
                     {
                         name: "BF/ I stopień/ 3rok/ Optometria",
-                        hasSchedule: true
+                        hasSchedule: true,
+                        id: 7,
                     }
                 ]
             }
@@ -50,38 +58,46 @@ let mockTeacherProps = [
     {
         name: "Chemia",
         hasSchedule: false,
+        id: 8,
         children: [
             {
                 name: "doktoranci",
                 hasSchedule: false,
+                id: 9,
                 children: [
                     {
                         name: "Bednarska-Adam Nikola",
                         hasSchedule: true,
+                        id: 10,
                     }
                 ]
             },
             {
                 name: "inni nauczyciele",
                 hasSchedule: false,
+                id: 11,
                 children: [
                     {
                         name: "Bakalarz Dominik",
                         hasSchedule: true,
+                        id: 12,
                     }
                 ]
             },
             {
                 name: "pracownicy",
                 hasSchedule: false,
+                id: 13,
                 children: [
                     {
                         name: "Bąk andrzej",
                         hasSchedule: true,
+                        id: 14,
                     },
                     {
                         name: "Bartczak Piotr",
                         hasSchedule: true,
+                        id: 15,
                     }
                 ]
             }
@@ -93,14 +109,17 @@ let mockRoomProps = [
     {
         name: "Katowice",
         hasSchedule: false,
+        id: 16,
         children: [
             {
                 name: "AWF",
                 hasSchedule: false,
+                id: 17,
                 children: [
                     {
                         name: " AWF Katedra Podstaw Fizjoterapii",
                         hasSchedule: true,
+                        id: 18,
                     }
                 ]
             }
@@ -113,39 +132,36 @@ let mockPropsGrouped = [
         name: "Grupy",
         haseSchedule: false,
         icon: <IconUsers/>,
+        id: 32,
         children: mockGoupProps
     },
     {
         name: "Nauczyciele",
         haseSchedule: false,
         icon: <IconUser/>,
+        id: 33,
         children: mockTeacherProps
     },
     {
         name: "Sale",
         haseSchedule: false,
         icon: <IconDoor/>,
+        id: 34,
         children: mockRoomProps
     },
 ]
 
-function logSmth(){
-    console.log("smth")
-}
-
-
-
 export default function SideNavBar() {
     return (
-        <div style={{width:'20%', float:'left'}}>
+        <div>
             {mockPropsGrouped.map((mainCategory =>
-                <NavLink label={mainCategory.name} href={"#"} leftSection={mainCategory.icon}>
+                <NavLink label={mainCategory.name} href={"#"} leftSection={mainCategory.icon} key={mainCategory.id}>
                     {mainCategory.children.map(subcategory => (
-                        <NavLink label={subcategory.name} href={"#"}>
+                        <NavLink label={subcategory.name} href={"#"} key={subcategory.id}>
                             {subcategory.children.map(preciseCategory =>
-                                <NavLink label={preciseCategory.name} href={"#"}>
+                                <NavLink label={preciseCategory.name} href={"#"} key={preciseCategory.id}>
                                     {preciseCategory.children.map(listing =>
-                                        <NavLink label={listing.name} href={"#"} onClick={logSmth}/>
+                                        <NavLink label={listing.name} href={"#"} key={listing.id}/>
                                     )}
                                 </NavLink>
                             )}

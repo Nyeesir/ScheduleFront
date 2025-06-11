@@ -1,22 +1,34 @@
 import "@mantine/core/styles.css";
-import {Grid, MantineProvider} from "@mantine/core";
+import {AppShell, Burger, Group, MantineProvider} from "@mantine/core";
 import { theme } from "./theme";
-import SideNavBar from "./components/SideNavBar.tsx";
+import {useDisclosure} from "@mantine/hooks";
+import {IconCalendarEvent} from "@tabler/icons-react";
 import Header from "./components/Header.tsx";
-import Schedule from "./components/Schedule.tsx";
+import SideNavBar from "./components/SideNavBar.tsx";
+import MainContentWindow from "./components/MainContentWindow.tsx";
 
 export default function App() {
-  return <MantineProvider theme={theme} defaultColorScheme="dark">
-    {/*<Grid grow={true}>*/}
-    {/*    <Grid.Col span={12}><Header /></Grid.Col>*/}
-    {/*    <Grid.Col span={2}><SideNavBar /></Grid.Col>*/}
-    {/*    <Grid.Col span={10}><Schedule/></Grid.Col>*/}
-    {/*</Grid>*/}
-      
-      <div>
-          <Header/>
-          <SideNavBar/>
-          <Schedule/>
-      </div>
-  </MantineProvider>;
+    const [opened, { toggle }] = useDisclosure();
+    
+    return <MantineProvider theme={theme} defaultColorScheme="dark">
+        <AppShell
+            header={{ height: 60 }}
+            navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !opened } }}
+            padding="md"
+        >
+            <AppShell.Header>
+                <Group h="100%" px="md">
+                    <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+                    <IconCalendarEvent size={30} />
+                    <Header/>
+                </Group>
+            </AppShell.Header>
+            <AppShell.Navbar p="md">
+                <SideNavBar/>
+            </AppShell.Navbar>
+            <AppShell.Main>
+                <MainContentWindow/>
+            </AppShell.Main>
+        </AppShell>
+    </MantineProvider>;
 }
