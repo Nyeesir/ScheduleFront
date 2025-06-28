@@ -1,44 +1,71 @@
-﻿import {NativeSelect} from "@mantine/core";
+﻿import { NativeSelect } from "@mantine/core";
+import { useEffect, useState } from 'react';
 
-let mockAvailableSchedules = [
-    {
-        groupName: "Grypa tygodni",
-        schedulues: [
-            {
-                schedName: "Semestr letni",
-                id: 0
-            },
-            {
-                schedName: "Semestr zimowy",
-                id: 1
-            }
-        ]
-    },
-    {
-        groupName: "Pojedyncze dni",
-        schedulues: [
-            {
-                schedName: "24.02 - 2.03",
-                id: 3
-            },
-            {
-                schedName: "3.03 - 9.03",
-                id: 4
-            },
-        ]
-    }
-];
+interface ScheduleData {
+    periods: Period[];
+    weeks: Period[];
+}
+
+interface Period {
+  name: string;
+  id: string;
+}
 
 export default function ScheduleTimePeriodPicker() {
-    return (
-        <NativeSelect label="Okreś okres" style={{width:'auto',float:'left'}}>
-            {mockAvailableSchedules.map(group =>
-                <optgroup label={group.groupName} key={group.groupName}>
-                    {group.schedulues.map(schedulue =>
-                        <option key={schedulue.id} value={schedulue.id}>{schedulue.schedName}</option>
-                    )}
-                </optgroup>
-            )}
-        </NativeSelect>
-    )
+  const [scheduleData, setScheduleData] = useState<ScheduleData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchSchedules = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch('http://localhost:8080/avaibleScheduleTimeGroups');
+        const data: ScheduleData = await response.json();
+        console.log(data);
+        setScheduleData(data);
+      } catch (error) {
+        setError('Nie udało się pobrać danych. Spróbuj ponownie później.');
+        console.error('Błąd podczas pobierania danych:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSchedules();
+  }, []);
+
+  if (isLoading) {
+    return <div>Ładowanie...</div>;
+  }
+
+  if (error) {
+    return <div style={{ color: 'red' }}>{error}</div>;
+  }
+
+  if (!scheduleData) {
+    return <div>Brak dostępnych danych</div>;
+  }
+
+  return (
+    <NativeSelect 
+      label="Określ okres" 
+      style={{ width: 'auto', float: 'left' }}
+    >
+      <optgroup label="Okresy">
+        {scheduleData.periods.map(period => (
+          <option key={period.id} value={period.id}>
+            {period.name}
+          </option>
+        ))}
+      </optgroup>
+      <optgroup label="Tygodnie">
+        {scheduleData.weeks.map(week => (
+          <option key={week.id} value={week.id}>
+            {week.name}
+          </option>
+        ))}
+      </optgroup>
+    </NativeSelect>
+  );
 }
