@@ -50,8 +50,9 @@ export default function ScheduleTimePeriodPicker() {
   return (
     <NativeSelect 
       label="Określ okres" 
-      style={{ width: 'auto', float: 'left' }}
+      style={{ width: '40%', float: 'left' }}
     >
+      <hr/>
       <optgroup label="Okresy">
         {scheduleData.periods.map(period => (
           <option key={period.id} value={period.id}>
@@ -59,6 +60,7 @@ export default function ScheduleTimePeriodPicker() {
           </option>
         ))}
       </optgroup>
+      <hr/>
       <optgroup label="Tygodnie">
         {scheduleData.weeks.map(week => (
           <option key={week.id} value={week.id}>

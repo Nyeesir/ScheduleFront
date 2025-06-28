@@ -1,6 +1,6 @@
 ﻿import {Box, NavLink} from '@mantine/core';
 import {useEffect, useState} from "react";
-import {IconChevronRight, IconDoor, IconUser, IconUsers} from '@tabler/icons-react'
+import {IconCalendarEvent, IconChevronRight, IconDoor, IconUser, IconUsers} from '@tabler/icons-react'
 
 interface ScheduleTypesData {
     scheduleTypes: ScheduleTypeData[];
@@ -37,6 +37,9 @@ export default function SideNavBar() {
                 const response = await fetch('http://localhost:8080/scheduleTypes');
                 const data: ScheduleTypesData = await response.json();
                 setScheduleTypesData(data);
+                if (data && data.scheduleTypes.length > 0) {
+                    data.scheduleTypes.map(scheduleType => fetchScheduleLists(scheduleType.scheduleTpeId));
+                }
             } catch (error) {
                 setError('Nie udało się pobrać danych. Spróbuj ponownie później.');
                 console.error('Błąd podczas pobierania danych:', error);
@@ -55,22 +58,17 @@ export default function SideNavBar() {
         }));
     };
 
-    useEffect(() => {
-        const fetchScheduleLists = async (id:string) => {
-            try {
-                const response = await fetch('http://localhost:8080/scheduleList?type='+id);
-                const data: ScheduleListData = await response.json();
-                addToScheduleLists(id, data)
-            } catch (error) {
-                setError('Nie udało się pobrać danych. Spróbuj ponownie później.');
-                console.error('Błąd podczas pobierania danych:', error);
-            }
-        };
-
-        fetchScheduleLists("1");
-        fetchScheduleLists("2");
-        fetchScheduleLists("3");
-    }, []);
+    const fetchScheduleLists = async (id:string) => {
+        try {
+            const response = await fetch('http://localhost:8080/scheduleList?type='+id);
+            const data: ScheduleListData = await response.json();
+            addToScheduleLists(id, data)
+        } catch (error) {
+            setError('Nie udało się pobrać danych. Spróbuj ponownie później.');
+            console.error('Błąd podczas pobierania danych:', error);
+        }
+    };
+    
     
     const generateNav = (scheduleList: ScheduleData[]) => {
         if (!scheduleList) {
