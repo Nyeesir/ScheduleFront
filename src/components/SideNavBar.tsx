@@ -1,6 +1,6 @@
-﻿import {Box, NavLink} from '@mantine/core';
+﻿import {Box, Button, NavLink, Paper, Text} from '@mantine/core';
 import {useEffect, useState} from "react";
-import {IconCalendarEvent, IconChevronRight, IconDoor, IconUser, IconUsers} from '@tabler/icons-react'
+import {IconChevronRight, IconDoor, IconUser, IconUsers} from '@tabler/icons-react'
 
 interface ScheduleTypesData {
     scheduleTypes: ScheduleTypeData[];
@@ -76,15 +76,33 @@ export default function SideNavBar() {
         }
         
         return scheduleList.map(schedule => (
+            <div style={{borderStyle: "none none none solid", borderWidth: "1px", borderColor: "var(--mantine-primary-color-5"}}>
             <NavLink
                 href="#"
                 key={schedule.id}
-                label={schedule.name}
-                childrenOffset={12}
-                rightSection={schedule.children ? <IconChevronRight size={16} stroke={2} className="mantine-rotate-rtl" /> : null}
+                label={
+                    <Box mb="xs">
+                        <Text>{schedule.name}</Text>
+                        {schedule.hasSchedule &&
+                            <Button 
+                                fullWidth
+                                size="compact-md"
+                                justify={"left"}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                }}
+                            >
+                                <Text> Pokaż plan</Text>
+                            </Button>
+                        }
+                    </Box>
+                }
+                childrenOffset={20}
+                rightSection={schedule.children && <IconChevronRight size={16} stroke={2} className="mantine-rotate-rtl" />}
             >
                 {schedule.children && generateNav(schedule.children)}
             </NavLink>
+            </div>
         ));
     }
 
@@ -103,16 +121,18 @@ export default function SideNavBar() {
 
 
     const items = scheduleTypesData?.scheduleTypes.map((scheduleType) => (
+        <Paper shadow="xs">
         <NavLink
             href="#"
             key={scheduleType.scheduleTpeId}
-            label={scheduleType.scheduleTypeName}
+            label={<Text>{scheduleType.scheduleTypeName}</Text>}
             childrenOffset={28}
             leftSection={getIconForScheduleType(scheduleType.scheduleTypeName, 24)}
             rightSection={<IconChevronRight size={16} stroke={2} className="mantine-rotate-rtl" />}
         >
             {generateNav(scheduleListsData[scheduleType.scheduleTpeId]?.items)}
         </NavLink>
+        </Paper>
     ));
 
     if (isLoading) {
