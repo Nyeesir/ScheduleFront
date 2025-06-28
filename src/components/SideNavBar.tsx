@@ -1,6 +1,8 @@
 ﻿import {Box, Button, NavLink, Paper, Text} from '@mantine/core';
 import {useEffect, useState} from "react";
 import {IconChevronRight, IconDoor, IconUser, IconUsers} from '@tabler/icons-react'
+import {ScheduleIdentifier,useSchedule} from './../ScheduleContext';
+
 
 interface ScheduleTypesData {
     scheduleTypes: ScheduleTypeData[];
@@ -29,6 +31,8 @@ export default function SideNavBar() {
     const [isLoading, setIsLoading] = useState(true);
     // const [isListLoading, setIsListLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const { setSelectedSchedule } = useSchedule();
+
 
     useEffect(() => {
         const fetchScheduleTypes = async () => {
@@ -76,7 +80,7 @@ export default function SideNavBar() {
         }
         
         return scheduleList.map(schedule => (
-            <div style={{borderStyle: "none none none solid", borderWidth: "1px", borderColor: "var(--mantine-primary-color-5"}}>
+            <div style={{borderStyle: "none none none solid", borderWidth: "1px", borderColor: "var(--mantine-primary-color-3"}}>
             <NavLink
                 href="#"
                 key={schedule.id}
@@ -90,6 +94,9 @@ export default function SideNavBar() {
                                 justify={"left"}
                                 onClick={(e) => {
                                     e.stopPropagation();
+                                    let scheduleIdentifier: ScheduleIdentifier = {id: schedule.id, type: schedule.type, timeGroup:"12"}
+                                    setSelectedSchedule(scheduleIdentifier);
+
                                 }}
                             >
                                 <Text> Pokaż plan</Text>
