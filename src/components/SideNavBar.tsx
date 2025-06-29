@@ -94,7 +94,7 @@ export default function SideNavBar() {
                                 justify={"left"}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    let scheduleIdentifier: ScheduleIdentifier = {id: schedule.id, type: schedule.type, timeGroup:"12"}
+                                    let scheduleIdentifier: ScheduleIdentifier = {id: schedule.id, type: schedule.type, timeGroup:"period_12"}
                                     setSelectedSchedule(scheduleIdentifier);
 
                                 }}

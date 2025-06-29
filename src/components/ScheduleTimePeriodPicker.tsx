@@ -3,30 +3,29 @@ import { useEffect, useState } from 'react';
 import { useSchedule } from './../ScheduleContext';
 
 
-interface ScheduleData {
+interface TimeGroupsData {
     periods: Period[];
     weeks: Period[];
 }
 
 interface Period {
-  name: string;
-  id: string;
+    name: string;
+    id: string;
 }
 
 export default function ScheduleTimePeriodPicker() {
-  const [scheduleData, setScheduleData] = useState<ScheduleData | null>(null);
+  const [timeGroupsData, setTimeGroupsData] = useState<TimeGroupsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { selectedSchedule, updateTimeGroup } = useSchedule();
-
 
   useEffect(() => {
     const fetchSchedules = async () => {
       try {
         setIsLoading(true);
         const response = await fetch('http://localhost:8080/avaibleScheduleTimeGroups');
-        const data: ScheduleData = await response.json();
-        setScheduleData(data);
+        const data: TimeGroupsData = await response.json();
+        setTimeGroupsData(data);
       } catch (error) {
         setError('Nie udało się pobrać danych. Spróbuj ponownie później.');
         console.error('Błąd podczas pobierania danych:', error);
@@ -46,7 +45,7 @@ export default function ScheduleTimePeriodPicker() {
     return <div style={{ color: 'red' }}>{error}</div>;
   }
 
-  if (!scheduleData) {
+  if (!timeGroupsData) {
     return <div>Brak dostępnych danych</div>;
   }
 
@@ -54,22 +53,22 @@ export default function ScheduleTimePeriodPicker() {
     <NativeSelect 
       label="Określ okres" 
       style={{ width: '40%', float: 'left' }}
-      value={selectedSchedule?.timeGroup || '12'}
+      value={selectedSchedule?.timeGroup || 'period_12'}
       onChange={(event) => updateTimeGroup(event.currentTarget.value)}
-      disabled={!selectedSchedule}
+      disabled={!timeGroupsData}
     >
       <hr/>
       <optgroup label="Okresy">
-        {scheduleData.periods.map(period => (
-          <option key={period.id} value={period.id}>
+        {timeGroupsData.periods.map(period => (
+          <option key={"period_"+period.id} value={"period_"+period.id}>
             {period.name}
           </option>
         ))}
       </optgroup>
       <hr/>
       <optgroup label="Tygodnie">
-        {scheduleData.weeks.map(week => (
-          <option key={week.id} value={week.id}>
+        {timeGroupsData.weeks.map(week => (
+          <option key={"week_"+week.id} value={"week_"+week.id}>
             {week.name}
           </option>
         ))}
